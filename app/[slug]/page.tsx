@@ -71,7 +71,10 @@ export default async function PostPage({ params }: Props) {
             {post.theme}
           </p>
 
-          <h1 className="post-hero-title animate-fade-up delay-1">
+          <h1
+            className="post-hero-title animate-fade-up delay-1"
+            style={{ fontFamily: 'var(--font-instrument-serif, Georgia, serif)', fontStyle: 'italic', fontWeight: 400 }}
+          >
             {post.title}
           </h1>
 
@@ -102,6 +105,22 @@ export default async function PostPage({ params }: Props) {
         <div className="post-hero-vignette" aria-hidden="true" />
       </section>
 
+      {/* ── マーキーストリップ ── */}
+      <div className="marquee-outer" aria-hidden="true">
+        <div className="marquee-track">
+          {[...Array(2)].map((_, gi) => (
+            <div key={gi} style={{ display: 'flex' }}>
+              {['nomadcoderecipe', 'AI × Engineering', post.theme, 'Claude', 'ChatGPT', '設計', 'アーキテクチャ', 'Thinking with AI'].map((t, i) => (
+                <span key={i} className="marquee-item">
+                  {t}
+                  <span className="marquee-dot" />
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ── 記事本文 ── */}
       <article className="post-body">
 
@@ -110,7 +129,7 @@ export default async function PostPage({ params }: Props) {
           {post.summary}
         </p>
 
-        <div className="prose animate-fade-up delay-1">
+        <div className="prose blur-reveal">
           <MDXRemote source={post.content} />
         </div>
       </article>

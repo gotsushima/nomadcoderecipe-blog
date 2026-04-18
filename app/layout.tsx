@@ -7,6 +7,7 @@ import {
   Playfair_Display,
   Lora,
   Inter,
+  Instrument_Serif,
 } from 'next/font/google'
 import './globals.css'
 import { LenisProvider } from './providers/lenis'
@@ -19,6 +20,13 @@ const syne = Syne({ subsets: ['latin'], variable: '--font-syne', display: 'swap'
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair', display: 'swap' })
 const lora = Lora({ subsets: ['latin'], variable: '--font-lora', display: 'swap' })
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  style: ['normal', 'italic'],
+  variable: '--font-instrument-serif',
+  display: 'swap',
+})
 
 const fontVariables = [
   spaceGrotesk.variable,
@@ -28,6 +36,7 @@ const fontVariables = [
   playfair.variable,
   lora.variable,
   inter.variable,
+  instrumentSerif.variable,
 ].join(' ')
 
 export const metadata: Metadata = {

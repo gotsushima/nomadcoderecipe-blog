@@ -4,14 +4,15 @@
    Design Tokens
    ============================================================ */
 :root {
-  --color-bg:        oklch(8%  0.02 270);
-  --color-surface:   oklch(13% 0.03 270);
-  --color-border:    oklch(22% 0.04 270);
+  /* Odd Ritual インスパイア — ウォームブラック、青みなし */
+  --color-bg:        oklch(6%  0.005 60);
+  --color-surface:   oklch(11% 0.008 60);
+  --color-border:    oklch(20% 0.010 60);
   --color-primary:   oklch(68% 0.20 270);
   --color-secondary: oklch(58% 0.15 330);
   --color-accent:    oklch(80% 0.28 90);
-  --color-text:      oklch(94% 0.01 270);
-  --color-muted:     oklch(64% 0.06 270);
+  --color-text:      oklch(96% 0.005 60);
+  --color-muted:     oklch(55% 0.015 60);
 
   --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-elastic:     cubic-bezier(0.32, 0.72, 0, 1);
@@ -67,11 +68,11 @@ body {
    Typography
    ============================================================ */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading, 'Space Grotesk', system-ui);
+  font-family: var(--font-heading, var(--font-instrument-serif, 'Georgia', serif));
   line-height: 1.1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   color: var(--color-text);
-  font-weight: 700;
+  font-weight: 400;
 }
 
 a {
@@ -511,6 +512,87 @@ a {
 ::-webkit-scrollbar-thumb {
   background: var(--color-border);
   border-radius: 2px;
+}
+
+/* ============================================================
+   Marquee — Odd Ritual インスパイア 横スクロール帯
+   ============================================================ */
+.marquee-outer {
+  overflow: hidden;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 0;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+  gap: 0;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0 1.5rem;
+  font-family: var(--font-instrument-serif, 'Georgia', serif);
+  font-size: var(--text-lg);
+  font-style: italic;
+  color: var(--color-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.marquee-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* ============================================================
+   Blur Text Reveal — スクロール連動ブラー解除
+   ============================================================ */
+@supports (animation-timeline: scroll()) {
+  .blur-reveal > * {
+    animation: blur-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 45%;
+  }
+}
+
+@keyframes blur-in {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@supports not (animation-timeline: scroll()) {
+  .blur-reveal > * { opacity: 1; filter: none; transform: none; }
 }
 
 /* ============================================================

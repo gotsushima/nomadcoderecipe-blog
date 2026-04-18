@@ -51,23 +51,25 @@ export default function HomePage() {
             className="animate-fade-up"
             style={{
               fontSize: 'var(--text-hero)',
-              fontFamily: 'var(--font-space-grotesk, system-ui)',
-              lineHeight: 0.88,
-              letterSpacing: '-0.05em',
+              fontFamily: 'var(--font-instrument-serif, Georgia, serif)',
+              fontWeight: 400,
+              lineHeight: 0.9,
+              letterSpacing: '-0.03em',
               color: 'var(--color-text)',
             }}
           >
             Think
             <br />
-            <span
+            <em
               style={{
-                WebkitTextStroke: '1.5px var(--color-primary)',
+                fontStyle: 'italic',
+                WebkitTextStroke: '1px var(--color-primary)',
                 WebkitTextFillColor: 'transparent',
                 color: 'transparent',
               }}
             >
               ing
-            </span>
+            </em>
             <br />
             with AI.
           </h1>
@@ -164,9 +166,11 @@ export default function HomePage() {
                           className="post-title"
                           style={{
                             fontSize: 'var(--text-2xl)',
-                            fontFamily: 'var(--font-space-grotesk, system-ui)',
-                            letterSpacing: '-0.03em',
-                            lineHeight: 1.08,
+                            fontFamily: 'var(--font-instrument-serif, Georgia, serif)',
+                            fontWeight: 400,
+                            fontStyle: 'italic',
+                            letterSpacing: '-0.02em',
+                            lineHeight: 1.1,
                             color: 'var(--color-text)',
                             transition: 'color 400ms var(--ease-out-expo)',
                           }}
