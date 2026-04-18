@@ -82,10 +82,15 @@ export async function insertConversation(
 
 /** 会話を処理済みにマークする */
 export async function markConversationsProcessed(ids: string[]): Promise<void> {
+  // UUID形式のみ許可 (インジェクション対策)
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  const safeIds = ids.filter((id) => UUID_RE.test(id))
+  if (safeIds.length === 0) return
+
   await supabaseRequest({
     method: 'PATCH',
     table: 'conversations',
-    query: `id=in.(${ids.join(',')})`,
+    query: `id=in.(${safeIds.join(',')})`,
     body: { processed: true },
   })
 }
