@@ -1,61 +1,60 @@
 @import 'tailwindcss';
 
 /* ============================================================
-   Design Tokens — CSS Custom Properties
-   実際の値は各ページで <body style={...}> から上書きされる
-   ここはフォールバック値 (ダークモードデフォルト)
+   Design Tokens
    ============================================================ */
 :root {
-  --color-bg:        oklch(10% 0.03 270);
-  --color-surface:   oklch(16% 0.04 270);
+  --color-bg:        oklch(8%  0.02 270);
+  --color-surface:   oklch(13% 0.03 270);
+  --color-border:    oklch(22% 0.04 270);
   --color-primary:   oklch(68% 0.20 270);
   --color-secondary: oklch(58% 0.15 330);
-  --color-accent:    oklch(78% 0.25 90);
-  --color-text:      oklch(92% 0.02 270);
-  --color-muted:     oklch(55% 0.05 270);
+  --color-accent:    oklch(80% 0.28 90);
+  --color-text:      oklch(94% 0.01 270);
+  --color-muted:     oklch(52% 0.05 270);
 
   --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-sine: cubic-bezier(0.37, 0, 0.63, 1);
   --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --duration-fast: 150ms;
-  --duration-base: 300ms;
-  --duration-slow: 600ms;
+  /* タイポグラフィスケール (流体) */
+  --text-xs:   clamp(0.7rem,  1vw,   0.8rem);
+  --text-sm:   clamp(0.85rem, 1.2vw, 0.95rem);
+  --text-base: clamp(1rem,    1.5vw, 1.1rem);
+  --text-lg:   clamp(1.15rem, 2vw,   1.35rem);
+  --text-xl:   clamp(1.4rem,  2.5vw, 1.75rem);
+  --text-2xl:  clamp(1.8rem,  3.5vw, 2.5rem);
+  --text-3xl:  clamp(2.4rem,  5vw,   4rem);
+  --text-4xl:  clamp(3.5rem,  8vw,   7rem);
+  --text-hero: clamp(5rem,    12vw,  11rem);
 }
 
 /* ============================================================
-   Base Reset
+   Reset
    ============================================================ */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  font-size: 16px;
 }
 
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-body, system-ui, sans-serif);
-  line-height: 1.7;
+  font-family: var(--font-body, 'IBM Plex Mono', monospace);
+  line-height: 1.75;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* ============================================================
-   Accessibility — reduced motion
+   Reduced Motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -66,87 +65,98 @@ body {
 /* ============================================================
    Typography
    ============================================================ */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-heading, system-ui, sans-serif);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading, 'Space Grotesk', system-ui);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   color: var(--color-text);
+  font-weight: 700;
 }
 
 a {
-  color: var(--color-primary);
-  text-underline-offset: 3px;
-  transition: color var(--duration-fast) var(--ease-out-expo);
-}
-
-a:hover {
-  color: var(--color-accent);
+  color: inherit;
+  text-decoration: none;
+  transition: color 150ms var(--ease-out-expo);
 }
 
 /* ============================================================
-   Prose (MDX 記事本文)
+   Awwwards-inspired UI Primitives
    ============================================================ */
-.prose {
-  max-width: 65ch;
-  color: var(--color-text);
-}
 
-.prose h2 {
-  font-size: clamp(1.4rem, 3vw, 1.75rem);
-  margin-top: 2.5em;
-  margin-bottom: 0.75em;
-  color: var(--color-primary);
-}
-
-.prose h3 {
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
-  margin-top: 2em;
-  margin-bottom: 0.5em;
-  color: var(--color-secondary);
-}
-
-.prose p {
-  margin-bottom: 1.5em;
-}
-
-.prose blockquote {
-  border-left: 3px solid var(--color-primary);
-  padding-left: 1.25em;
-  color: var(--color-muted);
-  font-style: italic;
-  margin: 1.5em 0;
-}
-
-.prose code {
-  background-color: var(--color-surface);
-  padding: 0.15em 0.4em;
-  border-radius: 4px;
-  font-size: 0.875em;
+/* ラベル — モノスペースの小見出し */
+.label {
   font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
 }
 
-.prose pre {
-  background-color: var(--color-surface);
-  border: 1px solid oklch(25% 0.04 270);
-  border-radius: 8px;
-  padding: 1.25em;
-  overflow-x: auto;
-  margin: 1.5em 0;
+/* 区切り線 */
+.rule {
+  border: none;
+  border-top: 1px solid var(--color-border);
 }
 
-.prose pre code {
-  background: none;
-  padding: 0;
+/* ホバーアンダーライン */
+.hover-line {
+  position: relative;
 }
+.hover-line::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-primary);
+  transition: width 300ms var(--ease-out-expo);
+}
+.hover-line:hover::after { width: 100%; }
 
 /* ============================================================
-   ジェネレーティブアートのベース
+   Page-in Animation
    ============================================================ */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-right {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s var(--ease-out-expo) both;
+}
+.animate-fade-in {
+  animation: fade-in 0.5s var(--ease-out-expo) both;
+}
+
+/* スタガー遅延 */
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.12s; }
+.delay-3 { animation-delay: 0.20s; }
+.delay-4 { animation-delay: 0.30s; }
+.delay-5 { animation-delay: 0.42s; }
+
+/* ============================================================
+   Generative Art Header
+   ============================================================ */
+.theme-header {
+  position: relative;
+  width: 100%;
+  height: clamp(260px, 42vh, 480px);
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
 .generative-canvas {
   position: absolute;
   inset: 0;
@@ -155,19 +165,142 @@ a:hover {
   pointer-events: none;
 }
 
-.theme-header {
-  position: relative;
-  width: 100%;
-  height: clamp(240px, 40vh, 420px);
-  overflow: hidden;
-  background-color: var(--color-bg);
+/* グラデーションフェード (アートとコンテンツの境界) */
+.theme-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, transparent, var(--color-bg));
+  pointer-events: none;
 }
 
 /* ============================================================
-   フォーカスリング (アクセシビリティ)
+   Prose (MDX 記事本文) — Awwwards 品質
+   ============================================================ */
+.prose {
+  color: var(--color-text);
+  font-size: var(--text-base);
+  line-height: 1.85;
+}
+
+.prose > * + * { margin-top: 1.6em; }
+
+.prose h2 {
+  font-size: var(--text-xl);
+  margin-top: 3em;
+  margin-bottom: 0.6em;
+  padding-top: 1.5em;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.prose h3 {
+  font-size: var(--text-lg);
+  margin-top: 2.5em;
+  margin-bottom: 0.5em;
+  color: var(--color-primary);
+}
+
+.prose p { margin-bottom: 0; }
+
+.prose strong { color: var(--color-text); font-weight: 600; }
+
+.prose blockquote {
+  border-left: 2px solid var(--color-primary);
+  padding: 1em 1.5em;
+  background: var(--color-surface);
+  border-radius: 0 8px 8px 0;
+  margin: 2em 0;
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+  font-size: var(--text-sm);
+}
+
+.prose th {
+  text-align: left;
+  padding: 0.75em 1em;
+  border-bottom: 1px solid var(--color-primary);
+  color: var(--color-primary);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.prose td {
+  padding: 0.75em 1em;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  vertical-align: top;
+}
+
+.prose tr:last-child td { border-bottom: none; }
+
+.prose code {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+  font-size: 0.875em;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--color-accent);
+}
+
+.prose pre {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5em;
+  overflow-x: auto;
+  margin: 2em 0;
+  position: relative;
+}
+
+.prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+
+.prose ul, .prose ol {
+  padding-left: 1.5em;
+}
+
+.prose li { margin-bottom: 0.4em; }
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 3em 0;
+}
+
+/* ============================================================
+   Focus (Accessibility)
    ============================================================ */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
   border-radius: 2px;
 }
