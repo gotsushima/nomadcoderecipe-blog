@@ -4,15 +4,22 @@
    Design Tokens
    ============================================================ */
 :root {
-  /* Odd Ritual インスパイア — ウォームブラック、青みなし */
-  --color-bg:        oklch(6%  0.005 60);
-  --color-surface:   oklch(11% 0.008 60);
-  --color-border:    oklch(20% 0.010 60);
-  --color-primary:   oklch(68% 0.20 270);
-  --color-secondary: oklch(58% 0.15 330);
-  --color-accent:    oklch(80% 0.28 90);
-  --color-text:      oklch(96% 0.005 60);
-  --color-muted:     oklch(55% 0.015 60);
+  /* Linear design system — dark-mode native */
+  --color-bg:          #08090a;  /* Marketing Black */
+  --color-surface:     #0f1011;  /* Panel Dark */
+  --color-surface-2:   #191a1b;  /* Level 3 Surface */
+  --color-surface-3:   #28282c;  /* Secondary Surface */
+  --color-border:      rgba(255, 255, 255, 0.08);  /* Standard */
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-primary:     #7170ff;  /* Accent Violet */
+  --color-primary-bg:  #5e6ad2;  /* Brand Indigo */
+  --color-primary-hover: #828fff;
+  --color-secondary:   #d0d6e0;  /* Silver Gray */
+  --color-accent:      #7170ff;
+  --color-text:        #f7f8f8;  /* Primary White */
+  --color-text-2:      #d0d6e0;  /* Secondary */
+  --color-muted:       #8a8f98;  /* Tertiary Gray */
+  --color-dim:         #62666d;  /* Quaternary */
 
   --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-elastic:     cubic-bezier(0.32, 0.72, 0, 1);
@@ -45,8 +52,11 @@ html {
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-body, 'IBM Plex Mono', monospace);
-  line-height: 1.75;
+  /* Linear: Inter Variable with cv01+ss03 OT features */
+  font-family: var(--font-inter, 'Inter', system-ui, -apple-system, sans-serif);
+  font-feature-settings: "cv01", "ss03";
+  font-size: 15px;
+  line-height: 1.6;
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -68,11 +78,12 @@ body {
    Typography
    ============================================================ */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading, var(--font-instrument-serif, 'Georgia', serif));
+  /* Linear: Inter Variable weight 510, aggressive negative tracking */
+  font-family: var(--font-heading, var(--font-inter, 'Inter', system-ui));
+  font-feature-settings: "cv01", "ss03";
   line-height: 1.1;
-  letter-spacing: -0.02em;
   color: var(--color-text);
-  font-weight: 400;
+  font-weight: 510;
 }
 
 a {
@@ -87,9 +98,12 @@ a {
 
 /* ラベル — モノスペースの小見出し */
 .label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: var(--text-xs);
-  letter-spacing: 0.12em;
+  /* Linear: Inter 12px weight 510, caption style */
+  font-family: var(--font-inter, 'Inter', system-ui);
+  font-feature-settings: "cv01", "ss03";
+  font-size: 12px;
+  font-weight: 510;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--color-muted);
 }
@@ -111,7 +125,7 @@ a {
   left: 0;
   width: 0;
   height: 1px;
-  background: var(--color-primary);
+  background: #7170ff;
   transition: width 300ms var(--ease-out-expo);
 }
 .hover-line:hover::after { width: 100%; }
@@ -192,18 +206,22 @@ a {
 
 .prose h2 {
   font-size: var(--text-xl);
+  font-weight: 510;
+  letter-spacing: -0.018em;
   margin-top: 3em;
   margin-bottom: 0.6em;
   padding-top: 1.5em;
-  border-top: 1px solid var(--color-border);
-  color: var(--color-text);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f7f8f8;
 }
 
 .prose h3 {
   font-size: var(--text-lg);
+  font-weight: 510;
+  letter-spacing: -0.014em;
   margin-top: 2.5em;
   margin-bottom: 0.5em;
-  color: var(--color-primary);
+  color: #7170ff;
 }
 
 .prose p { margin-bottom: 0; }
@@ -211,13 +229,16 @@ a {
 .prose strong { color: var(--color-text); font-weight: 600; }
 
 .prose blockquote {
-  border-left: 2px solid var(--color-primary);
+  /* Linear: brand indigo left border, dark surface */
+  border-left: 2px solid #5e6ad2;
   padding: 1em 1.5em;
-  background: var(--color-surface);
-  border-radius: 0 8px 8px 0;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 2px solid #5e6ad2;
+  border-radius: 0 6px 6px 0;
   margin: 2em 0;
   font-style: italic;
-  color: var(--color-muted);
+  color: #8a8f98;
 }
 
 .prose table {
@@ -248,19 +269,22 @@ a {
 .prose tr:last-child td { border-bottom: none; }
 
 .prose code {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  /* Linear: rgba white bg, white border */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0.15em 0.45em;
   border-radius: 4px;
   font-size: 0.875em;
-  font-family: 'IBM Plex Mono', monospace;
-  color: var(--color-accent);
+  font-family: var(--font-ibm-plex-mono, 'IBM Plex Mono', ui-monospace, monospace);
+  color: #d0d6e0;
 }
 
 .prose pre {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  background: #0f1011;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Linear: multi-layer shadow */
+  box-shadow: rgba(0,0,0,0.2) 0px 0px 0px 1px, rgba(0,0,0,0.1) 0px 4px 12px;
+  border-radius: 8px;
   padding: 1.5em;
   overflow-x: auto;
   margin: 2em 0;
@@ -420,13 +444,12 @@ a {
   padding: 3.5rem 0;
   overflow: hidden;
   gap: 1.5rem;
-  /* ホバー時の左ボーダーアニメーション */
-  border-left: 2px solid transparent;
-  transition: border-color 400ms var(--ease-out-expo), padding-left 400ms var(--ease-out-expo);
+  border-left: 1px solid transparent;
+  transition: border-color 300ms var(--ease-out-expo), padding-left 300ms var(--ease-out-expo);
 }
 
 .post-row:hover {
-  border-left-color: var(--color-primary);
+  border-left-color: #7170ff;
   padding-left: 1.25rem;
 }
 
@@ -436,7 +459,7 @@ a {
   inset: 0;
   background: radial-gradient(
     ellipse 60% 80% at 20% 50%,
-    oklch(68% 0.20 270 / 0.04) 0%,
+    rgba(113, 112, 255, 0.06) 0%,
     transparent 70%
   );
   opacity: 0;
@@ -609,11 +632,12 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.1rem 2rem;
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  background: oklch(8% 0.02 270 / 0.72);
-  border-bottom: 1px solid oklch(100% 0 0 / 0.07);
+  padding: 1rem 2rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(8, 9, 10, 0.88);
+  /* Linear: semi-transparent white border */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   transition: background 300ms var(--ease-out-expo);
 }
 
@@ -624,10 +648,15 @@ a {
 .post-nav-back:hover { color: var(--color-text); }
 
 .post-theme-badge {
-  color: var(--color-primary);
-  border: 1px solid oklch(from var(--color-primary) l c h / 0.35);
-  padding: 0.2em 0.65em;
-  border-radius: 3px;
+  /* Linear: subtle badge */
+  color: #7170ff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.15em 0.6em;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 510;
+  letter-spacing: 0.04em;
   transition: border-color 200ms ease;
 }
 
@@ -652,7 +681,7 @@ a {
   /* Subtle glass backing so text stays legible over animation */
   background: radial-gradient(
     ellipse 80% 60% at 50% 50%,
-    oklch(8% 0.02 270 / 0.55) 0%,
+    rgba(8, 9, 10, 0.55) 0%,
     transparent 100%
   );
 }
@@ -703,10 +732,14 @@ a {
 }
 
 .post-source-pill {
-  border: 1px solid var(--color-border);
-  padding: 0.18em 0.55em;
-  border-radius: 3px;
-  color: var(--color-secondary);
+  /* Linear: neutral pill */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.15em 0.6em;
+  border-radius: 9999px;
+  color: #d0d6e0;
+  font-size: 11px;
+  font-weight: 510;
 }
 
 /* スクロールインジケーター */
