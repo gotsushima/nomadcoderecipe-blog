@@ -41,8 +41,7 @@ export function BlogFeaturedPosts({ posts }: Props) {
         {/* Large card */}
         {featured[0] && (
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="md:row-span-2"
@@ -76,8 +75,7 @@ export function BlogFeaturedPosts({ posts }: Props) {
         {featured.slice(1).map((post, index) => (
           <motion.div
             key={post.id}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: (index + 1) * 0.1, ease: [0.22, 1, 0.36, 1] }}
           >

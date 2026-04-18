@@ -7,7 +7,6 @@ import { useState } from "react"
 const navItems = [
   { label: "記事一覧", href: "#articles" },
   { label: "About", href: "#about" },
-  { label: "WordPress版 ↗", href: "https://www.nomadcoderecipe.com", external: true },
 ]
 
 export function BlogHeader() {
@@ -33,9 +32,7 @@ export function BlogHeader() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  target={item.external ? "_blank" : undefined}
-                  rel={item.external ? "noopener noreferrer" : undefined}
-                  className="relative inline-block text-primary/70 transition-colors hover:text-primary"
+                          className="relative inline-block text-primary/70 transition-colors hover:text-primary"
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >

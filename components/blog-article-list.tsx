@@ -32,9 +32,9 @@ export function BlogArticleList({ posts }: Props) {
         {posts.map((post, index) => (
           <motion.article
             key={post.id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 1, y: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: true }}
             transition={{
               duration: 0.5,
               delay: index * 0.05,
