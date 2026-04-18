@@ -32,11 +32,9 @@ const securityHeaders = [
 ]
 
 const nextConfig: NextConfig = {
-  // /blog/ のベースパスで配信
-  basePath: '/blog',
-
-  // 静的エクスポートは使わず ISR を活用
-  output: undefined,
+  // basePath は設定しない
+  // → このアプリ自体が blog 専用。ルート / で動作する
+  // → nomadcoderecipe.com/blog へのルーティングは Cloudflare Workers で担当
 
   // 画像は外部ソース不使用のため最小設定
   images: { unoptimized: false },
