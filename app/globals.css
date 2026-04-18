@@ -1,0 +1,173 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   Design Tokens — CSS Custom Properties
+   実際の値は各ページで <body style={...}> から上書きされる
+   ここはフォールバック値 (ダークモードデフォルト)
+   ============================================================ */
+:root {
+  --color-bg:        oklch(10% 0.03 270);
+  --color-surface:   oklch(16% 0.04 270);
+  --color-primary:   oklch(68% 0.20 270);
+  --color-secondary: oklch(58% 0.15 330);
+  --color-accent:    oklch(78% 0.25 90);
+  --color-text:      oklch(92% 0.02 270);
+  --color-muted:     oklch(55% 0.05 270);
+
+  --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-sine: cubic-bezier(0.37, 0, 0.63, 1);
+  --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+}
+
+/* ============================================================
+   Base Reset
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body, system-ui, sans-serif);
+  line-height: 1.7;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================================
+   Accessibility — reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Typography
+   ============================================================ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading, system-ui, sans-serif);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+a {
+  color: var(--color-primary);
+  text-underline-offset: 3px;
+  transition: color var(--duration-fast) var(--ease-out-expo);
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+/* ============================================================
+   Prose (MDX 記事本文)
+   ============================================================ */
+.prose {
+  max-width: 65ch;
+  color: var(--color-text);
+}
+
+.prose h2 {
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  margin-top: 2.5em;
+  margin-bottom: 0.75em;
+  color: var(--color-primary);
+}
+
+.prose h3 {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  color: var(--color-secondary);
+}
+
+.prose p {
+  margin-bottom: 1.5em;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--color-primary);
+  padding-left: 1.25em;
+  color: var(--color-muted);
+  font-style: italic;
+  margin: 1.5em 0;
+}
+
+.prose code {
+  background-color: var(--color-surface);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.875em;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.prose pre {
+  background-color: var(--color-surface);
+  border: 1px solid oklch(25% 0.04 270);
+  border-radius: 8px;
+  padding: 1.25em;
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+}
+
+/* ============================================================
+   ジェネレーティブアートのベース
+   ============================================================ */
+.generative-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.theme-header {
+  position: relative;
+  width: 100%;
+  height: clamp(240px, 40vh, 420px);
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+/* ============================================================
+   フォーカスリング (アクセシビリティ)
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}

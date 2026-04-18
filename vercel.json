@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "regions": ["hnd1"],
+  "crons": [
+    {
+      "path": "/api/cron/generate",
+      "schedule": "0 17 * * *"
+    }
+  ]
+}
