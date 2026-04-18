@@ -197,17 +197,21 @@ a {
    Prose (MDX 記事本文) — Awwwards 品質
    ============================================================ */
 .prose {
-  color: var(--color-text);
-  font-size: var(--text-base);
-  line-height: 1.85;
+  /* Linear: secondary text (#d0d6e0) for body, not harsh white */
+  color: #d0d6e0;
+  font-size: 15px;
+  line-height: 1.60;
+  letter-spacing: -0.165px;
 }
 
 .prose > * + * { margin-top: 1.6em; }
 
 .prose h2 {
-  font-size: var(--text-xl);
-  font-weight: 510;
-  letter-spacing: -0.018em;
+  /* Linear H2: 24px, weight 400, -0.288px tracking */
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: -0.288px;
+  line-height: 1.33;
   margin-top: 3em;
   margin-bottom: 0.6em;
   padding-top: 1.5em;
@@ -216,17 +220,19 @@ a {
 }
 
 .prose h3 {
-  font-size: var(--text-lg);
-  font-weight: 510;
-  letter-spacing: -0.014em;
+  /* Linear H3: 20px, weight 590, -0.24px tracking */
+  font-size: 1.25rem;
+  font-weight: 590;
+  letter-spacing: -0.24px;
+  line-height: 1.33;
   margin-top: 2.5em;
   margin-bottom: 0.5em;
   color: #7170ff;
 }
 
-.prose p { margin-bottom: 0; }
+.prose p { margin-bottom: 0; color: #d0d6e0; letter-spacing: -0.165px; }
 
-.prose strong { color: var(--color-text); font-weight: 600; }
+.prose strong { color: #f7f8f8; font-weight: 590; }
 
 .prose blockquote {
   /* Linear: brand indigo left border, dark surface */
@@ -269,14 +275,15 @@ a {
 .prose tr:last-child td { border-bottom: none; }
 
 .prose code {
-  /* Linear: rgba white bg, white border */
+  /* Linear: rgba white bg, white border; Berkeley Mono → IBM Plex Mono fallback */
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0.15em 0.45em;
   border-radius: 4px;
   font-size: 0.875em;
-  font-family: var(--font-ibm-plex-mono, 'IBM Plex Mono', ui-monospace, monospace);
+  font-family: 'Berkeley Mono', var(--font-ibm-plex-mono, 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace);
   color: #d0d6e0;
+  letter-spacing: 0;
 }
 
 .prose pre {
@@ -295,9 +302,10 @@ a {
   background: none;
   border: none;
   padding: 0;
-  color: var(--color-text);
-  font-size: var(--text-sm);
+  color: #d0d6e0;
+  font-size: 14px;
   line-height: 1.7;
+  letter-spacing: 0;
 }
 
 .prose ul, .prose ol {
@@ -451,6 +459,8 @@ a {
 .post-row:hover {
   border-left-color: #7170ff;
   padding-left: 1.25rem;
+  /* Linear: luminance stepping for elevation */
+  background: rgba(255, 255, 255, 0.015);
 }
 
 /* ホバー背景グロー */
@@ -479,7 +489,7 @@ a {
   transform: translateY(-50%);
   font-size: clamp(7rem, 22vw, 17rem);
   font-family: var(--font-space-grotesk, system-ui);
-  font-weight: 700;
+  font-weight: 590;
   letter-spacing: -0.06em;
   line-height: 1;
   color: var(--color-text);
@@ -638,6 +648,13 @@ a {
   background: rgba(8, 9, 10, 0.88);
   /* Linear: semi-transparent white border */
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  /* Linear: dialog-level multi-layer shadow */
+  box-shadow:
+    rgba(0,0,0,0) 0px 8px 2px,
+    rgba(0,0,0,0.01) 0px 5px 2px,
+    rgba(0,0,0,0.04) 0px 3px 2px,
+    rgba(0,0,0,0.07) 0px 1px 1px,
+    rgba(0,0,0,0.08) 0px 0px 1px;
   transition: background 300ms var(--ease-out-expo);
 }
 
