@@ -63,8 +63,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja" className={`${fontVariables} h-full`}>
-      <body className="flex min-h-full flex-col">
+    <html lang="ja" className={`${fontVariables} dark h-full`}>
+      <body className="flex min-h-full flex-col bg-background text-foreground">
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

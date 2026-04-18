@@ -1,6 +1,97 @@
 @import 'tailwindcss';
 
 /* ============================================================
+   v0 Shadcn/Tailwind tokens — dark mode forced via .dark on <html>
+   ============================================================ */
+.dark {
+  --background: #08090a;
+  --foreground: #f7f8f8;
+  --card: #0f1011;
+  --card-foreground: #f7f8f8;
+  --popover: #0f1011;
+  --popover-foreground: #f7f8f8;
+  --primary: #f7f8f8;
+  --primary-foreground: #08090a;
+  --secondary: #191a1b;
+  --secondary-foreground: #f7f8f8;
+  --muted: #191a1b;
+  --muted-foreground: #8a8f98;
+  --accent: #7170ff;
+  --accent-foreground: #f7f8f8;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #f7f8f8;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #7170ff;
+  --radius: 0px;
+}
+
+/* Map Tailwind vars */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --font-sans: var(--font-inter, 'Inter', system-ui, sans-serif);
+  --font-serif: var(--font-instrument-serif, 'Georgia', serif);
+  --font-mono: var(--font-ibm-plex-mono, 'IBM Plex Mono', ui-monospace, monospace);
+}
+
+/* v0 Tailwind utility classes used by blog components */
+.bg-background { background-color: var(--background); }
+.text-primary { color: var(--primary); }
+.text-muted-foreground { color: var(--muted-foreground); }
+.text-accent { color: var(--accent); }
+.border-border { border-color: var(--border); }
+.border-accent { border-color: var(--accent); }
+.bg-accent\/10 { background-color: color-mix(in srgb, var(--accent) 10%, transparent); }
+
+/* WP記事本文スタイル */
+.wp-content h1, .wp-content h2, .wp-content h3,
+.wp-content h4, .wp-content h5, .wp-content h6 {
+  color: #f7f8f8;
+  font-weight: 510;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  letter-spacing: -0.02em;
+}
+.wp-content h2 { font-size: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5em; }
+.wp-content h3 { font-size: 1.25rem; color: #7170ff; }
+.wp-content p { color: #d0d6e0; margin-bottom: 1.2em; line-height: 1.8; }
+.wp-content a { color: #7170ff; text-decoration: underline; text-underline-offset: 3px; }
+.wp-content ul, .wp-content ol { padding-left: 1.5em; color: #d0d6e0; margin-bottom: 1.2em; }
+.wp-content li { margin-bottom: 0.4em; line-height: 1.75; }
+.wp-content strong { color: #f7f8f8; font-weight: 590; }
+.wp-content blockquote {
+  border-left: 2px solid #5e6ad2;
+  padding: 1em 1.5em;
+  background: rgba(255,255,255,0.02);
+  border-radius: 0 6px 6px 0;
+  margin: 2em 0;
+  font-style: italic;
+  color: #8a8f98;
+}
+.wp-content pre, .wp-content code {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.875em;
+}
+.wp-content pre { padding: 1.5em; overflow-x: auto; margin: 2em 0; }
+.wp-content code { padding: 0.15em 0.45em; }
+.wp-content pre code { background: none; border: none; padding: 0; }
+.wp-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 2em 0; }
+.wp-content table { width: 100%; border-collapse: collapse; margin: 2em 0; font-size: 0.9rem; }
+.wp-content th { text-align: left; padding: 0.75em 1em; border-bottom: 1px solid #7170ff; color: #7170ff; }
+.wp-content td { padding: 0.75em 1em; border-bottom: 1px solid rgba(255,255,255,0.08); color: #d0d6e0; }
+
+/* ============================================================
    Design Tokens
    ============================================================ */
 :root {
