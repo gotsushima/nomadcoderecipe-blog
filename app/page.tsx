@@ -89,6 +89,7 @@ export default function HomePage() {
               return (
                 <li
                   key={post.slug}
+                  className="scroll-reveal"
                   style={{ borderTop: '1px solid var(--color-border)' }}
                 >
                   <Link

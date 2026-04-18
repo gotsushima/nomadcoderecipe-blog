@@ -36,6 +36,10 @@ const nextConfig: NextConfig = {
   // → このアプリ自体が blog 専用。ルート / で動作する
   // → nomadcoderecipe.com/blog へのルーティングは Cloudflare Workers で担当
 
+  experimental: {
+    viewTransition: true,
+  },
+
   // 画像は外部ソース不使用のため最小設定
   images: { unoptimized: false },
 

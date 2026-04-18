@@ -9,6 +9,7 @@ import {
   Inter,
 } from 'next/font/google'
 import './globals.css'
+import { LenisProvider } from './providers/lenis'
 
 // ── Google Fonts — next/font で最適化 (layout shift なし) ──
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk', display: 'swap' })
@@ -54,7 +55,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja" className={`${fontVariables} h-full`}>
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <LenisProvider>{children}</LenisProvider>
+      </body>
     </html>
   )
 }
