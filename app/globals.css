@@ -512,3 +512,187 @@ a {
   background: var(--color-border);
   border-radius: 2px;
 }
+
+/* ============================================================
+   個別ポストページ — Apple-like レイアウト
+   ============================================================ */
+
+/* ナビゲーション */
+.post-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 2rem;
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  background: oklch(8% 0.02 270 / 0.72);
+  border-bottom: 1px solid oklch(100% 0 0 / 0.07);
+  transition: background 300ms var(--ease-out-expo);
+}
+
+.post-nav-back {
+  color: var(--color-muted);
+  transition: color 200ms var(--ease-out-expo);
+}
+.post-nav-back:hover { color: var(--color-text); }
+
+.post-theme-badge {
+  color: var(--color-primary);
+  border: 1px solid oklch(from var(--color-primary) l c h / 0.35);
+  padding: 0.2em 0.65em;
+  border-radius: 3px;
+  transition: border-color 200ms ease;
+}
+
+/* フルビューポートヒーロー */
+.post-hero {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.post-hero-inner {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 2rem;
+  max-width: min(900px, 92vw);
+  /* Subtle glass backing so text stays legible over animation */
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 50%,
+    oklch(8% 0.02 270 / 0.55) 0%,
+    transparent 100%
+  );
+}
+
+/* カテゴリラベル */
+.post-kicker {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 1.75rem;
+  opacity: 0.9;
+}
+
+/* メインタイトル */
+.post-hero-title {
+  font-size: clamp(2.2rem, 7vw, 5.5rem);
+  font-family: var(--font-heading, var(--font-space-grotesk, system-ui));
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+  margin-bottom: 2rem;
+}
+
+/* メタ情報ライン */
+.post-hero-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 0.8rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+
+.post-hero-dot {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-border);
+  flex-shrink: 0;
+}
+
+.post-source-pill {
+  border: 1px solid var(--color-border);
+  padding: 0.18em 0.55em;
+  border-radius: 3px;
+  color: var(--color-secondary);
+}
+
+/* スクロールインジケーター */
+.post-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  z-index: 2;
+  animation: fade-in 1s 1.2s var(--ease-out-expo) both;
+}
+
+.post-scroll-line {
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(to bottom, var(--color-primary), transparent);
+  animation: scroll-breathe 2.4s var(--ease-in-out-sine) infinite;
+  transform-origin: top;
+}
+
+@keyframes scroll-breathe {
+  0%, 100% { opacity: 0.7; transform: scaleY(1); }
+  50%       { opacity: 0.2; transform: scaleY(0.5); }
+}
+
+/* 下部フェード */
+.post-hero-vignette {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28%;
+  background: linear-gradient(to bottom, transparent, var(--color-bg));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── 記事本文エリア ─────────────────────────────────────────── */
+.post-body {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 5rem 2rem 7rem;
+}
+
+/* リード文 */
+.post-lead {
+  font-size: var(--text-lg);
+  color: var(--color-muted);
+  line-height: 1.8;
+  text-align: center;
+  max-width: 56ch;
+  margin: 0 auto 4rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ── フッター ────────────────────────────────────────────────── */
+.post-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 2rem 5rem;
+  border-top: 1px solid var(--color-border);
+}

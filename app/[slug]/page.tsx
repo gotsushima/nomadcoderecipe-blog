@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getPost, getAllSlugs } from '@/lib/posts'
 import { resolveDesignParams, paletteToCssVars } from '@/lib/design'
-import { ThemeHeader } from '@/components/themes'
+import { PostBackground } from '@/components/ui/PostBackground'
 import type { Metadata } from 'next'
 
 interface Props {
@@ -50,135 +50,81 @@ export default async function PostPage({ params }: Props) {
     <div style={{ ...pageStyle, backgroundColor: 'var(--color-bg)', minHeight: '100dvh' }}>
 
       {/* ── ナビ ── */}
-      <nav
-        className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between px-6 py-4 md:px-12"
-        style={{
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          backgroundColor: 'oklch(8% 0.02 270 / 0.85)',
-          borderBottom: '1px solid var(--color-border)',
-        }}
-      >
-        <Link href="/" className="label hover-line" style={{ color: 'var(--color-muted)' }}>
+      <nav className="post-nav">
+        <Link href="/" className="post-nav-back label hover-line">
           ← blog
         </Link>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <span className="label" style={{ color: 'var(--color-muted)' }}>{post.date}</span>
-          <span
-            className="label"
-            style={{
-              color: 'var(--color-primary)',
-              border: '1px solid var(--color-border)',
-              padding: '0.2em 0.6em',
-              borderRadius: 4,
-            }}
-          >
-            {post.theme}
-          </span>
+          <span className="post-theme-badge label">{post.theme}</span>
         </div>
       </nav>
 
-      {/* ── ジェネレーティブアートヘッダー ── */}
-      <div style={{ paddingTop: '57px' }}>
-        <ThemeHeader
-          theme={design.theme}
-          seed={design.seed}
-          speedMultiplier={design.speedMultiplier}
-          title={post.title}
-        />
-      </div>
+      {/* ── フルビューポートヒーロー ── */}
+      <section className="post-hero" aria-label="Article hero">
+        {/* Canvas アニメーション背景 */}
+        <PostBackground seed={design.seed} speedMultiplier={design.speedMultiplier} />
 
-      {/* ── 記事ヘッダー ── */}
-      <header
-        className="mx-auto max-w-3xl px-6 pb-12 pt-16 md:px-8"
-        style={{ borderBottom: '1px solid var(--color-border)' }}
-      >
-        {/* メタ情報 */}
-        <div className="animate-fade-up mb-6 flex flex-wrap items-center gap-4">
-          <time
-            dateTime={post.date}
-            className="label"
-            style={{ color: 'var(--color-muted)' }}
-          >
-            {post.date}
-          </time>
-          <span className="label" style={{ color: 'var(--color-muted)' }}>
-            {post.readingTime} min read
-          </span>
-          <div className="flex gap-2">
-            {post.sources.map((src) => (
-              <span
-                key={src}
-                className="label"
-                style={{
-                  border: '1px solid var(--color-border)',
-                  padding: '0.2em 0.6em',
-                  borderRadius: 4,
-                  color: 'var(--color-secondary)',
-                }}
-              >
-                {src === 'claude' ? 'Claude' : 'ChatGPT'}
-              </span>
-            ))}
+        {/* 中央コンテンツ */}
+        <div className="post-hero-inner">
+          <p className="post-kicker animate-fade-in">
+            {post.theme}
+          </p>
+
+          <h1 className="post-hero-title animate-fade-up delay-1">
+            {post.title}
+          </h1>
+
+          <div className="post-hero-meta animate-fade-up delay-2">
+            <time dateTime={post.date}>{post.date}</time>
+            <span className="post-hero-dot" aria-hidden="true" />
+            <span>{post.readingTime} min read</span>
+            {post.sources.length > 0 && (
+              <>
+                <span className="post-hero-dot" aria-hidden="true" />
+                {post.sources.map((src) => (
+                  <span key={src} className="post-source-pill">
+                    {src === 'claude' ? 'Claude' : 'ChatGPT'}
+                  </span>
+                ))}
+              </>
+            )}
           </div>
         </div>
 
-        {/* タイトル */}
-        <h1
-          className="animate-fade-up delay-1"
-          style={{
-            fontSize: 'var(--text-3xl)',
-            fontFamily: 'var(--font-heading, var(--font-space-grotesk, system-ui))',
-            lineHeight: 1.05,
-            letterSpacing: '-0.035em',
-            color: 'var(--color-text)',
-            marginBottom: '1.5rem',
-          }}
-        >
-          {post.title}
-        </h1>
+        {/* スクロールインジケーター */}
+        <div className="post-scroll-hint" aria-hidden="true">
+          <span className="label" style={{ color: 'var(--color-muted)' }}>scroll</span>
+          <div className="post-scroll-line" />
+        </div>
 
-        {/* リード文 */}
-        <p
-          className="animate-fade-up delay-2"
-          style={{
-            fontSize: 'var(--text-lg)',
-            color: 'var(--color-muted)',
-            lineHeight: 1.65,
-            maxWidth: '60ch',
-            borderLeft: '2px solid var(--color-primary)',
-            paddingLeft: '1.25rem',
-          }}
-        >
-          {post.summary}
-        </p>
-      </header>
+        {/* 下部フェードオーバーレイ */}
+        <div className="post-hero-vignette" aria-hidden="true" />
+      </section>
 
       {/* ── 記事本文 ── */}
-      <article className="mx-auto max-w-3xl px-6 py-14 md:px-8">
-        <div className="prose animate-fade-up delay-3">
+      <article className="post-body">
+
+        {/* リード文 */}
+        <p className="post-lead animate-fade-up">
+          {post.summary}
+        </p>
+
+        <div className="prose animate-fade-up delay-1">
           <MDXRemote source={post.content} />
         </div>
       </article>
 
       {/* ── フッター ── */}
-      <footer
-        className="mx-auto max-w-3xl px-6 pb-20 pt-12 md:px-8"
-        style={{ borderTop: '1px solid var(--color-border)' }}
-      >
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="label hover-line"
-            style={{ color: 'var(--color-primary)' }}
-          >
-            ← 記事一覧
-          </Link>
-          <span className="label" style={{ color: 'var(--color-muted)' }}>
-            nomadcoderecipe
-          </span>
-        </div>
+      <footer className="post-footer-bar">
+        <Link href="/" className="label hover-line" style={{ color: 'var(--color-primary)' }}>
+          ← 記事一覧
+        </Link>
+        <span className="label" style={{ color: 'var(--color-muted)' }}>
+          nomadcoderecipe
+        </span>
       </footer>
+
     </div>
   )
 }
