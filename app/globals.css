@@ -379,6 +379,76 @@ a {
 }
 
 /* ============================================================
+   ノイズテクスチャオーバーレイ
+   ============================================================ */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* ============================================================
+   記事リスト — 巨大番号レイアウト
+   ============================================================ */
+.post-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 3.5rem 0;
+  overflow: hidden;
+  gap: 1.5rem;
+}
+
+/* 巨大な背景番号 */
+.post-num {
+  position: absolute;
+  right: -0.02em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(7rem, 22vw, 17rem);
+  font-family: var(--font-space-grotesk, system-ui);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--color-text);
+  opacity: 0.045;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 500ms var(--ease-out-expo);
+}
+
+.post-row:hover .post-num {
+  opacity: 0.09;
+}
+
+/* コンテンツ (番号の前面) */
+.post-content {
+  position: relative;
+  z-index: 1;
+  padding-right: 2rem;
+}
+
+/* 矢印 */
+.post-arrow {
+  position: relative;
+  z-index: 1;
+  display: none;
+  font-size: 1.5rem;
+  color: var(--color-border);
+  transition: transform 400ms var(--ease-spring), color 300ms ease;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .post-arrow { display: block; }
+}
+
+/* ============================================================
    Scrollbar
    ============================================================ */
 ::-webkit-scrollbar { width: 4px; }

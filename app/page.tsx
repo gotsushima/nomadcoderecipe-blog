@@ -14,71 +14,65 @@ export default function HomePage() {
   const posts = getAllPostMeta()
 
   return (
-    <div style={{ minHeight: '100dvh', backgroundColor: 'var(--color-bg)' }}>
+    <div style={{ minHeight: '100dvh', backgroundColor: 'var(--color-bg)', position: 'relative' }}>
+
+      {/* ── ノイズテクスチャ ── */}
+      <div className="noise-overlay" aria-hidden="true" />
+
+      {/* ── ナビ ── */}
+      <nav className="flex items-center justify-between px-6 py-5 md:px-14"
+        style={{ borderBottom: '1px solid var(--color-border)' }}>
+        <span className="label">nomadcoderecipe</span>
+        <span className="label" style={{ color: 'var(--color-muted)' }}>
+          {posts.length} posts
+        </span>
+      </nav>
+
       {/* ── Hero ── */}
-      <header
-        style={{ borderBottom: '1px solid var(--color-border)' }}
-        className="px-6 pb-16 pt-20 md:px-12 md:pt-28"
-      >
-        <div className="mx-auto max-w-6xl">
-          <p className="label animate-fade-up mb-6">
-            nomadcoderecipe / blog — AI対話記録
-          </p>
-
-          <h1
-            className="animate-fade-up delay-1"
+      <header className="px-6 pt-16 pb-20 md:px-14 md:pt-24 md:pb-28">
+        <h1
+          style={{
+            fontSize: 'var(--text-hero)',
+            fontFamily: 'var(--font-space-grotesk, system-ui)',
+            lineHeight: 0.88,
+            letterSpacing: '-0.05em',
+            color: 'var(--color-text)',
+          }}
+        >
+          Think
+          <br />
+          <span
             style={{
-              fontSize: 'var(--text-hero)',
-              fontFamily: 'var(--font-space-grotesk, system-ui)',
-              lineHeight: 0.92,
-              letterSpacing: '-0.04em',
-              color: 'var(--color-text)',
-              maxWidth: '14ch',
+              WebkitTextStroke: '1.5px var(--color-primary)',
+              WebkitTextFillColor: 'transparent',
+              color: 'transparent',
             }}
           >
-            Thinking
-            <br />
-            <span style={{ color: 'var(--color-primary)' }}>with</span>
-            <br />
-            AI.
-          </h1>
+            ing
+          </span>
+          <br />
+          with AI.
+        </h1>
 
-          <p
-            className="animate-fade-up delay-2 mt-8"
-            style={{
-              fontSize: 'var(--text-lg)',
-              color: 'var(--color-muted)',
-              maxWidth: '52ch',
-              lineHeight: 1.6,
-            }}
-          >
-            Claude と ChatGPT との実際の対話から生まれる技術的洞察。
-            設計判断・アーキテクチャ・エンジニアリングの思考過程を毎日公開。
-          </p>
-
-          <div className="animate-fade-up delay-3 mt-10 flex items-center gap-8">
-            <div>
-              <span
-                style={{ fontSize: 'var(--text-3xl)', fontFamily: 'var(--font-space-grotesk)', color: 'var(--color-primary)', fontWeight: 700 }}
-              >
-                {posts.length}
-              </span>
-              <span className="label ml-2">posts</span>
-            </div>
-            <div style={{ width: 1, height: 40, backgroundColor: 'var(--color-border)' }} />
-            <div>
-              <span className="label">毎日 02:00 JST 自動更新</span>
-            </div>
-          </div>
-        </div>
+        <p
+          className="mt-10"
+          style={{
+            fontSize: 'var(--text-sm)',
+            color: 'var(--color-muted)',
+            maxWidth: '44ch',
+            lineHeight: 1.7,
+            letterSpacing: '0.01em',
+          }}
+        >
+          Claude と ChatGPT との実際の対話から生まれる技術的洞察を毎日公開。
+          設計・アーキテクチャ・エンジニアリングの思考過程。
+        </p>
       </header>
 
-      {/* ── Post List ── */}
-      <main className="mx-auto max-w-6xl px-6 py-12 md:px-12">
+      {/* ── 記事リスト ── */}
+      <main className="px-6 pb-40 md:px-14">
         {posts.length === 0 ? (
-          <div className="py-32 text-center">
-            <p className="label">No posts yet — 自動生成が始まると毎日更新されます</p>
-          </div>
+          <p className="label py-32 text-center">まだ記事がありません</p>
         ) : (
           <ol>
             {posts.map((post, index) => {
@@ -90,120 +84,83 @@ export default function HomePage() {
                 <li
                   key={post.slug}
                   className="scroll-reveal"
-                  style={{ borderTop: '1px solid var(--color-border)' }}
+                  style={{
+                    ...cssVars as React.CSSProperties,
+                    borderTop: '1px solid var(--color-border)',
+                  }}
                 >
                   <Link
                     href={`/${post.slug}`}
-                    className="group block py-8 transition-all duration-500 md:py-10"
-                    style={cssVars as React.CSSProperties}
+                    className="post-row group block"
                   >
-                    <div className="grid grid-cols-[3rem_1fr] gap-6 md:grid-cols-[4rem_1fr_auto]">
-                      {/* 連番 */}
-                      <span
+                    {/* 巨大な背景番号 */}
+                    <span className="post-num" aria-hidden="true">{num}</span>
+
+                    {/* コンテンツ */}
+                    <div className="post-content">
+                      {/* メタ */}
+                      <div className="label mb-5" style={{ color: 'var(--color-muted)' }}>
+                        <time dateTime={post.date}>{post.date}</time>
+                        <span style={{ margin: '0 0.75em', opacity: 0.4 }}>·</span>
+                        <span style={{ color: 'var(--color-primary)' }}>{post.theme}</span>
+                        <span style={{ margin: '0 0.75em', opacity: 0.4 }}>·</span>
+                        {post.readingTime} min
+                      </div>
+
+                      {/* タイトル */}
+                      <h2
+                        className="post-title group-hover:text-[var(--color-primary)]"
                         style={{
                           fontSize: 'var(--text-2xl)',
-                          fontFamily: 'var(--font-ibm-plex-mono, monospace)',
-                          color: 'var(--color-border)',
-                          fontWeight: 700,
-                          lineHeight: 1,
-                          paddingTop: '0.15em',
+                          fontFamily: 'var(--font-space-grotesk, system-ui)',
+                          letterSpacing: '-0.03em',
+                          lineHeight: 1.08,
+                          color: 'var(--color-text)',
                           transition: 'color 400ms var(--ease-out-expo)',
                         }}
-                        className="group-hover:text-[var(--color-primary)]"
                       >
-                        {num}
-                      </span>
+                        {post.title}
+                      </h2>
 
-                      {/* コンテンツ */}
-                      <div>
-                        {/* メタ */}
-                        <div className="mb-3 flex flex-wrap items-center gap-3">
-                          <time
-                            dateTime={post.date}
-                            className="label"
-                            style={{ color: 'var(--color-muted)' }}
-                          >
-                            {post.date}
-                          </time>
-                          <span
-                            className="label"
-                            style={{
-                              color: 'var(--color-primary)',
-                              borderLeft: '1px solid var(--color-border)',
-                              paddingLeft: '0.75rem',
-                            }}
-                          >
-                            {post.theme}
-                          </span>
-                          <span className="label" style={{ color: 'var(--color-muted)' }}>
-                            {post.readingTime} min
-                          </span>
-                        </div>
-
-                        {/* タイトル */}
-                        <h2
-                          style={{
-                            fontSize: 'var(--text-xl)',
-                            fontFamily: 'var(--font-space-grotesk, system-ui)',
-                            color: 'var(--color-text)',
-                            letterSpacing: '-0.02em',
-                            lineHeight: 1.2,
-                            transition: 'color 300ms var(--ease-out-expo)',
-                          }}
-                          className="group-hover:text-[var(--color-primary)] mb-3"
-                        >
-                          {post.title}
-                        </h2>
-
-                        {/* サマリー */}
-                        <p
-                          style={{
-                            fontSize: 'var(--text-sm)',
-                            color: 'var(--color-muted)',
-                            lineHeight: 1.65,
-                            maxWidth: '70ch',
-                          }}
-                          className="line-clamp-2"
-                        >
-                          {post.summary}
-                        </p>
-
-                        {/* ソースバッジ */}
-                        <div className="mt-4 flex gap-2">
-                          {post.sources.map((src) => (
-                            <span
-                              key={src}
-                              className="label"
-                              style={{
-                                border: '1px solid var(--color-border)',
-                                padding: '0.2em 0.6em',
-                                borderRadius: '4px',
-                                color: 'var(--color-secondary)',
-                              }}
-                            >
-                              {src === 'claude' ? 'Claude' : 'ChatGPT'}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* 矢印 (デスクトップのみ) */}
-                      <div
-                        className="hidden items-center md:flex"
+                      {/* サマリー */}
+                      <p
+                        className="line-clamp-2 mt-4"
                         style={{
-                          color: 'var(--color-border)',
-                          fontSize: '1.5rem',
-                          transition: 'transform 300ms var(--ease-spring), color 300ms ease',
+                          fontSize: 'var(--text-sm)',
+                          color: 'var(--color-muted)',
+                          maxWidth: '62ch',
+                          lineHeight: 1.7,
                         }}
                       >
-                        <span
-                          className="group-hover:translate-x-2 group-hover:text-[var(--color-primary)]"
-                          style={{ display: 'block', transition: 'inherit' }}
-                        >
-                          →
-                        </span>
+                        {post.summary}
+                      </p>
+
+                      {/* ソースバッジ */}
+                      <div className="mt-5 flex gap-2">
+                        {post.sources.map((src) => (
+                          <span
+                            key={src}
+                            className="label"
+                            style={{
+                              border: '1px solid var(--color-border)',
+                              padding: '0.2em 0.7em',
+                              borderRadius: 3,
+                              color: 'var(--color-secondary)',
+                            }}
+                          >
+                            {src === 'claude' ? 'Claude' : 'ChatGPT'}
+                          </span>
+                        ))}
                       </div>
                     </div>
+
+                    {/* 矢印 */}
+                    <span
+                      className="post-arrow group-hover:translate-x-2 group-hover:text-[var(--color-primary)]"
+                      aria-hidden="true"
+                    >
+                      →
+                    </span>
                   </Link>
                 </li>
               )
@@ -212,16 +169,14 @@ export default function HomePage() {
         )}
       </main>
 
-      {/* ── Footer ── */}
+      {/* ── フッター ── */}
       <footer
-        className="px-6 py-10 md:px-12"
+        className="px-6 py-8 md:px-14"
         style={{ borderTop: '1px solid var(--color-border)' }}
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
+        <div className="flex items-center justify-between">
           <span className="label">nomadcoderecipe</span>
-          <span className="label" style={{ color: 'var(--color-muted)' }}>
-            Powered by Claude Code
-          </span>
+          <span className="label" style={{ color: 'var(--color-muted)' }}>毎日 02:00 JST 自動更新</span>
         </div>
       </footer>
     </div>
