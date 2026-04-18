@@ -11,7 +11,7 @@
   --color-secondary: oklch(58% 0.15 330);
   --color-accent:    oklch(80% 0.28 90);
   --color-text:      oklch(94% 0.01 270);
-  --color-muted:     oklch(52% 0.05 270);
+  --color-muted:     oklch(64% 0.06 270);
 
   --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-elastic:     cubic-bezier(0.32, 0.72, 0, 1);
@@ -19,7 +19,7 @@
   --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* タイポグラフィスケール (流体) */
-  --text-xs:   clamp(0.7rem,  1vw,   0.8rem);
+  --text-xs:   clamp(0.75rem, 1vw,   0.85rem);
   --text-sm:   clamp(0.85rem, 1.2vw, 0.95rem);
   --text-base: clamp(1rem,    1.5vw, 1.1rem);
   --text-lg:   clamp(1.15rem, 2vw,   1.35rem);
@@ -27,7 +27,7 @@
   --text-2xl:  clamp(1.8rem,  3.5vw, 2.5rem);
   --text-3xl:  clamp(2.4rem,  5vw,   4rem);
   --text-4xl:  clamp(3.5rem,  8vw,   7rem);
-  --text-hero: clamp(5rem,    12vw,  11rem);
+  --text-hero: clamp(3.5rem,  12vw,  11rem);
 }
 
 /* ============================================================
@@ -385,10 +385,27 @@ a {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 100;
   opacity: 0.032;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
+}
+
+/* ============================================================
+   スクロールインジケーター
+   ============================================================ */
+.scroll-dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  animation: scroll-pulse 2s var(--ease-in-out-sine) infinite;
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.3; transform: scale(0.6); }
 }
 
 /* ============================================================
@@ -402,6 +419,32 @@ a {
   padding: 3.5rem 0;
   overflow: hidden;
   gap: 1.5rem;
+  /* ホバー時の左ボーダーアニメーション */
+  border-left: 2px solid transparent;
+  transition: border-color 400ms var(--ease-out-expo), padding-left 400ms var(--ease-out-expo);
+}
+
+.post-row:hover {
+  border-left-color: var(--color-primary);
+  padding-left: 1.25rem;
+}
+
+/* ホバー背景グロー */
+.post-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 80% at 20% 50%,
+    oklch(68% 0.20 270 / 0.04) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms var(--ease-out-expo);
+}
+
+.post-row:hover .post-glow {
+  opacity: 1;
 }
 
 /* 巨大な背景番号 */
@@ -416,14 +459,15 @@ a {
   letter-spacing: -0.06em;
   line-height: 1;
   color: var(--color-text);
-  opacity: 0.045;
+  opacity: 0.04;
   pointer-events: none;
   user-select: none;
-  transition: opacity 500ms var(--ease-out-expo);
+  transition: opacity 600ms var(--ease-out-expo), color 400ms ease;
 }
 
 .post-row:hover .post-num {
-  opacity: 0.09;
+  opacity: 0.10;
+  color: var(--color-primary);
 }
 
 /* コンテンツ (番号の前面) */
@@ -431,6 +475,17 @@ a {
   position: relative;
   z-index: 1;
   padding-right: 2rem;
+}
+
+/* タイトルホバー */
+.post-row:hover .post-title {
+  color: var(--color-primary) !important;
+}
+
+/* ソースバッジホバー */
+.post-row:hover .source-badge {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 /* 矢印 */
