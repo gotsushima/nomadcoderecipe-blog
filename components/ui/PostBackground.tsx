@@ -87,6 +87,8 @@ export function PostBackground({ seed = 42, speedMultiplier = 1 }: PostBackgroun
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
+    // Capture as non-null so TypeScript narrows correctly inside closures
+    const c: CanvasRenderingContext2D = ctx
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -122,25 +124,25 @@ export function PostBackground({ seed = 42, speedMultiplier = 1 }: PostBackgroun
 
     // ── Tick: Nebula ─────────────────────────────────────────────────────────
     function tickNebula() {
-      ctx.clearRect(0, 0, w, h)
+      c.clearRect(0, 0, w, h)
       for (const b of nebula) {
         const r = Math.min(w, h) * b.rFrac
         const x = b.bx * w + Math.sin(t * b.speedX + b.phaseX) * b.rangeX * w
         const y = b.by * h + Math.cos(t * b.speedY + b.phaseY) * b.rangeY * h
-        const grad = ctx.createRadialGradient(x, y, 0, x, y, r)
-        grad.addColorStop(0,   colors[b.colorIdx])
+        const grad = c.createRadialGradient(x, y, 0, x, y, r)
+        grad.addColorStop(0,    colors[b.colorIdx])
         grad.addColorStop(0.35, colors[b.colorIdx])
-        grad.addColorStop(1,   'transparent')
-        ctx.globalAlpha = 0.09
-        ctx.fillStyle   = grad
-        ctx.fillRect(0, 0, w, h)
+        grad.addColorStop(1,    'transparent')
+        c.globalAlpha = 0.09
+        c.fillStyle   = grad
+        c.fillRect(0, 0, w, h)
       }
-      ctx.globalAlpha = 1
+      c.globalAlpha = 1
     }
 
     // ── Tick: Constellation ──────────────────────────────────────────────────
     function tickConstellation() {
-      ctx.clearRect(0, 0, w, h)
+      c.clearRect(0, 0, w, h)
 
       for (const s of stars) {
         s.x = (s.x + s.vx + 1) % 1
@@ -150,96 +152,98 @@ export function PostBackground({ seed = 42, speedMultiplier = 1 }: PostBackgroun
       const threshold = Math.min(w, h) * 0.17
       const threshSq  = threshold * threshold
 
-      ctx.lineWidth = 0.5
+      c.lineWidth = 0.5
       for (let i = 0; i < stars.length; i++) {
         for (let j = i + 1; j < stars.length; j++) {
-          const dx = (stars[i].x - stars[j].x) * w
-          const dy = (stars[i].y - stars[j].y) * h
+          const si = stars[i]!
+          const sj = stars[j]!
+          const dx = (si.x - sj.x) * w
+          const dy = (si.y - sj.y) * h
           const dSq = dx * dx + dy * dy
           if (dSq < threshSq) {
-            ctx.beginPath()
-            ctx.moveTo(stars[i].x * w, stars[i].y * h)
-            ctx.lineTo(stars[j].x * w, stars[j].y * h)
-            ctx.strokeStyle = colors[stars[i].colorIdx]
-            ctx.globalAlpha = (1 - dSq / threshSq) * 0.22
-            ctx.stroke()
+            c.beginPath()
+            c.moveTo(si.x * w, si.y * h)
+            c.lineTo(sj.x * w, sj.y * h)
+            c.strokeStyle = colors[si.colorIdx]
+            c.globalAlpha = (1 - dSq / threshSq) * 0.22
+            c.stroke()
           }
         }
       }
 
       for (const s of stars) {
         const twinkle = 0.5 + 0.5 * Math.sin(t * s.twinkleSpeed + s.phase)
-        ctx.beginPath()
-        ctx.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2)
-        ctx.fillStyle   = colors[s.colorIdx]
-        ctx.globalAlpha = 0.25 + twinkle * 0.75
-        ctx.fill()
+        c.beginPath()
+        c.arc(s.x * w, s.y * h, s.r, 0, Math.PI * 2)
+        c.fillStyle   = colors[s.colorIdx]
+        c.globalAlpha = 0.25 + twinkle * 0.75
+        c.fill()
       }
 
-      ctx.globalAlpha = 1
+      c.globalAlpha = 1
     }
 
     // ── Tick: Aurora ─────────────────────────────────────────────────────────
     function tickAurora() {
-      ctx.clearRect(0, 0, w, h)
+      c.clearRect(0, 0, w, h)
 
       for (const band of aurora) {
         const cy = band.yFrac * h
         const bh = band.hFrac * h
         const steps = 60
 
-        ctx.beginPath()
-        ctx.moveTo(0, cy + bh)
+        c.beginPath()
+        c.moveTo(0, cy + bh)
 
         for (let i = 0; i <= steps; i++) {
           const x  = (i / steps) * w
           const w1 = Math.sin(x * band.freq + t * band.drift + band.phase)
           const w2 = Math.sin(x * band.freq * 2.5 - t * band.drift * 0.55 + band.phase * 1.7)
-          ctx.lineTo(x, cy + (w1 * 0.65 + w2 * 0.35) * bh - bh)
+          c.lineTo(x, cy + (w1 * 0.65 + w2 * 0.35) * bh - bh)
         }
         for (let i = steps; i >= 0; i--) {
           const x  = (i / steps) * w
           const w1 = Math.sin(x * band.freq + t * band.drift + band.phase)
           const w2 = Math.sin(x * band.freq * 2.5 - t * band.drift * 0.55 + band.phase * 1.7)
-          ctx.lineTo(x, cy + (w1 * 0.65 + w2 * 0.35) * bh + bh)
+          c.lineTo(x, cy + (w1 * 0.65 + w2 * 0.35) * bh + bh)
         }
-        ctx.closePath()
+        c.closePath()
 
-        const grad = ctx.createLinearGradient(0, cy - bh * 2, 0, cy + bh * 2)
+        const grad = c.createLinearGradient(0, cy - bh * 2, 0, cy + bh * 2)
         grad.addColorStop(0,   'transparent')
         grad.addColorStop(0.5, colors[band.colorIdx])
         grad.addColorStop(1,   'transparent')
 
-        ctx.fillStyle   = grad
-        ctx.globalAlpha = band.alpha * (0.65 + 0.35 * Math.sin(t * 0.45 + band.phase))
-        ctx.fill()
+        c.fillStyle   = grad
+        c.globalAlpha = band.alpha * (0.65 + 0.35 * Math.sin(t * 0.45 + band.phase))
+        c.fill()
       }
 
-      ctx.globalAlpha = 1
+      c.globalAlpha = 1
     }
 
     // ── Tick: Prism ──────────────────────────────────────────────────────────
     function tickPrism() {
-      ctx.clearRect(0, 0, w, h)
-      ctx.globalCompositeOperation = 'screen'
+      c.clearRect(0, 0, w, h)
+      c.globalCompositeOperation = 'screen'
 
       for (const node of prism) {
-        const cx = (0.5 + 0.42 * Math.sin(t * node.speedX + node.phaseX)) * w
-        const cy = (0.5 + 0.42 * Math.cos(t * node.speedY + node.phaseY)) * h
+        const nx = (0.5 + 0.42 * Math.sin(t * node.speedX + node.phaseX)) * w
+        const ny = (0.5 + 0.42 * Math.cos(t * node.speedY + node.phaseY)) * h
         const r  = Math.min(w, h) * node.rFrac
 
-        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r)
+        const grad = c.createRadialGradient(nx, ny, 0, nx, ny, r)
         grad.addColorStop(0,   colors[node.colorIdx])
         grad.addColorStop(0.3, colors[node.colorIdx])
         grad.addColorStop(1,   'transparent')
 
-        ctx.globalAlpha = 0.065
-        ctx.fillStyle   = grad
-        ctx.fillRect(0, 0, w, h)
+        c.globalAlpha = 0.065
+        c.fillStyle   = grad
+        c.fillRect(0, 0, w, h)
       }
 
-      ctx.globalCompositeOperation = 'source-over'
-      ctx.globalAlpha = 1
+      c.globalCompositeOperation = 'source-over'
+      c.globalAlpha = 1
     }
 
     function drawFrame() {
