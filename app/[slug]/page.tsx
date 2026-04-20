@@ -35,7 +35,8 @@ export const revalidate = 3600
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
   const post = getPost(slug)
-  if (!post || post.draft) notFound()
+  const isDev = process.env.NODE_ENV === 'development'
+  if (!post || (post.draft && !isDev)) notFound()
 
   const design = resolveDesignParams(slug, post.theme)
   const cssVars = paletteToCssVars(design.palette)
