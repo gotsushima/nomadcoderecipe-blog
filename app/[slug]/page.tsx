@@ -35,7 +35,7 @@ export const revalidate = 3600
 export default async function PostPage({ params }: Props) {
   const { slug } = await params
   const post = getPost(slug)
-  if (!post) notFound()
+  if (!post || post.draft) notFound()
 
   const design = resolveDesignParams(slug, post.theme)
   const cssVars = paletteToCssVars(design.palette)
@@ -87,7 +87,7 @@ export default async function PostPage({ params }: Props) {
                 <span className="post-hero-dot" aria-hidden="true" />
                 {post.sources.map((src) => (
                   <span key={src} className="post-source-pill">
-                    {src === 'claude' ? 'Claude' : 'ChatGPT'}
+                    {src === 'claude' ? 'Claude' : src === 'chatgpt' ? 'ChatGPT' : 'Digest'}
                   </span>
                 ))}
               </>

@@ -1,63 +1,71 @@
 "use client"
 
 import Link from "next/link"
-import { motion } from "framer-motion"
-import { useState } from "react"
-
-const navItems = [
-  { label: "記事一覧", href: "#articles" },
-  { label: "About", href: "#about" },
-]
+import { useState, useEffect } from "react"
 
 export function BlogHeader() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [isLight, setIsLight] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+
+  useEffect(() => {
+    const saved = localStorage.getItem("noto-theme")
+    if (saved === "light") {
+      setIsLight(true)
+      document.body.classList.add("light")
+    }
+  }, [])
+
+  const toggleTheme = () => {
+    const next = !isLight
+    setIsLight(next)
+    document.body.classList.toggle("light", next)
+    localStorage.setItem("noto-theme", next ? "light" : "dark")
+  }
+
+  const closeDrawer = () => {
+    setDrawerOpen(false)
+    document.body.style.overflow = ""
+  }
+
+  const toggleDrawer = () => {
+    const next = !drawerOpen
+    setDrawerOpen(next)
+    document.body.style.overflow = next ? "hidden" : ""
+  }
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 mix-blend-difference"
-    >
-      <div className="flex items-start justify-between px-6 py-6 md:px-12 md:py-8">
-        <Link href="/" className="group">
-          <span className="text-sm font-medium tracking-widest text-primary">
-            NOMADCODERECIPE
-          </span>
-        </Link>
+    <>
+      <nav className="noto-nav">
+        <Link href="/" className="nav-logo">NCR</Link>
 
-        <nav className="hidden md:block">
-          <ul className="flex flex-col items-end gap-1 text-sm">
-            {navItems.map((item, index) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                          className="relative inline-block text-primary/70 transition-colors hover:text-primary"
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <span className="relative">
-                    {item.label}
-                    {hoveredIndex === index && (
-                      <motion.span
-                        layoutId="nav-underline"
-                        className="absolute -bottom-0.5 left-0 right-0 h-px bg-current"
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: 1 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                    )}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <ul className="nav-links">
+          <li><Link href="#stories">Stories</Link></li>
+          <li><Link href="#issues">Issues</Link></li>
+          <li><Link href="#about">About</Link></li>
+        </ul>
 
-        <span className="hidden md:block text-xs text-primary/50 tracking-wider">
-          AI × Engineering
-        </span>
+        <div className="nav-right">
+          <button className="theme-toggle" onClick={toggleTheme}>
+            {isLight ? "Dark" : "Light"}
+          </button>
+          <button
+            className={`nav-hamburger${drawerOpen ? " open" : ""}`}
+            aria-label="メニュー"
+            onClick={toggleDrawer}
+          >
+            <span /><span /><span />
+          </button>
+        </div>
+      </nav>
+
+      <div className={`mobile-drawer${drawerOpen ? " open" : ""}`}>
+        <Link href="#stories" onClick={closeDrawer}>Stories</Link>
+        <Link href="#issues" onClick={closeDrawer}>Issues</Link>
+        <Link href="#about" onClick={closeDrawer}>About</Link>
+        <div className="mobile-drawer-bottom">
+          NCR — Nomad Code Recipe<br />AI &amp; Engineering Log
+        </div>
       </div>
-    </motion.header>
+    </>
   )
 }

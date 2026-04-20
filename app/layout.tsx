@@ -8,11 +8,13 @@ import {
   Lora,
   Inter,
   Instrument_Serif,
+  DM_Serif_Display,
+  Bebas_Neue,
 } from 'next/font/google'
 import './globals.css'
 import { LenisProvider } from './providers/lenis'
+import { NotoCursor } from '@/components/noto-cursor'
 
-// ── Google Fonts — next/font で最適化 (layout shift なし) ──
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk', display: 'swap' })
 const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-fraunces', display: 'swap' })
 const ibmPlexMono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-ibm-plex-mono', display: 'swap' })
@@ -27,6 +29,19 @@ const instrumentSerif = Instrument_Serif({
   variable: '--font-instrument-serif',
   display: 'swap',
 })
+const dmSerifDisplay = DM_Serif_Display({
+  subsets: ['latin'],
+  weight: '400',
+  style: ['normal', 'italic'],
+  variable: '--font-dm-serif',
+  display: 'swap',
+})
+const bebasNeue = Bebas_Neue({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-bebas',
+  display: 'swap',
+})
 
 const fontVariables = [
   spaceGrotesk.variable,
@@ -37,6 +52,8 @@ const fontVariables = [
   lora.variable,
   inter.variable,
   instrumentSerif.variable,
+  dmSerifDisplay.variable,
+  bebasNeue.variable,
 ].join(' ')
 
 export const metadata: Metadata = {
@@ -61,10 +78,21 @@ export const metadata: Metadata = {
   },
 }
 
+const notoVars = {
+  '--noto-bg':     '#0A0A09',
+  '--noto-bg2':    '#111110',
+  '--noto-fg':     '#F2EDE4',
+  '--noto-muted':  '#5A5651',
+  '--noto-accent': '#C8A96E',
+  '--noto-red':    '#D4442C',
+  '--noto-border': 'rgba(242, 237, 228, 0.1)',
+} as React.CSSProperties
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja" className={`${fontVariables} dark h-full`}>
+    <html lang="ja" className={`${fontVariables} dark h-full`} style={notoVars}>
       <body className="flex min-h-full flex-col bg-background text-foreground">
+        <NotoCursor />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

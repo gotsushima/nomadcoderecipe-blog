@@ -15,7 +15,8 @@ export interface PostFrontmatter {
   fontPair: number
   speedMultiplier: number
   summary: string
-  sources: Array<'claude' | 'chatgpt'>
+  sources: Array<'claude' | 'chatgpt' | 'digest'>
+  draft?: boolean
 }
 
 export interface PostMeta extends PostFrontmatter {
@@ -62,7 +63,7 @@ export function getAllPostMeta(): PostMeta[] {
       const { content: _, ...meta } = post
       return meta
     })
-    .filter((p): p is PostMeta => p !== null)
+    .filter((p): p is PostMeta => p !== null && p.draft !== true)
 }
 
 /** スラッグから記事を取得する */
@@ -70,11 +71,15 @@ export function getPost(slug: string): Post | null {
   return parsePost(slug)
 }
 
-/** 全スラッグを返す (静的ルート生成用) */
+/** 全スラッグを返す (静的ルート生成用) — draft は除外 */
 export function getAllSlugs(): string[] {
   if (!fs.existsSync(POSTS_DIR)) return []
   return fs
     .readdirSync(POSTS_DIR)
     .filter((f) => f.endsWith('.mdx'))
     .map((f) => f.replace(/\.mdx$/, ''))
+    .filter((slug) => {
+      const post = parsePost(slug)
+      return post !== null && post.draft !== true
+    })
 }

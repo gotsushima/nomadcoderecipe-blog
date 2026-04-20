@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "digest": "tsx scripts/run-digest.ts",
+    "digest:date": "tsx scripts/run-digest.ts"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",
@@ -28,6 +30,7 @@
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

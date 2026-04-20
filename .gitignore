@@ -43,6 +43,10 @@ credentials.json
 # vercel
 .vercel
 
+# digest: 音声ファイルはバイナリなので git 管理しない
+/public/audio/*.mp3
+/public/audio/*.wav
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,7 +1,7 @@
 "use client"
 
-import { motion } from "framer-motion"
 import Link from "next/link"
+import { useEffect, useRef } from "react"
 import type { WpPost } from "@/lib/wp-posts"
 
 interface Props {
@@ -9,81 +9,42 @@ interface Props {
 }
 
 export function BlogArticleList({ posts }: Props) {
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const reveals = sectionRef.current?.querySelectorAll(".reveal")
+    if (!reveals) return
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible") }),
+      { threshold: 0.08 }
+    )
+    reveals.forEach((el) => obs.observe(el))
+    return () => obs.disconnect()
+  }, [])
+
   return (
-    <section id="articles" className="px-6 py-32 md:px-12 border-t border-border">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="mb-16"
-      >
-        <span className="text-xs tracking-[0.3em] text-muted-foreground uppercase block mb-4">
-          All Articles
-        </span>
-        <h2 className="text-5xl md:text-7xl font-medium tracking-tight text-primary">
-          最新の
-          <br />
-          <span className="font-serif italic text-muted-foreground">記事</span>
-        </h2>
-      </motion.div>
+    <div ref={sectionRef}>
+      <div className="section-header reveal" id="issues">
+        <h2 className="section-title">All <em>Issues</em></h2>
+        <span className="section-count">{String(posts.length).padStart(2, "0")}</span>
+      </div>
 
-      <div className="space-y-0">
+      <div className="posts-list reveal" id="about">
         {posts.map((post, index) => (
-          <motion.article
+          <Link
             key={post.id}
-            initial={{ opacity: 1, y: 0 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.5,
-              delay: index * 0.05,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            href={`/blog/${post.slug}`}
+            className="list-item"
           >
-            <Link
-              href={`/blog/${post.slug}`}
-              className="group flex items-center justify-between py-8 border-b border-border transition-colors hover:border-accent"
-            >
-              <div className="flex items-start gap-6 md:gap-12">
-                <span className="text-xs text-muted-foreground font-mono mt-1 flex-shrink-0">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div className="min-w-0">
-                  <h3 className="text-xl md:text-3xl font-medium text-primary tracking-tight group-hover:text-accent transition-colors leading-tight">
-                    {post.title}
-                  </h3>
-                  <div className="flex items-center gap-4 mt-2 flex-wrap">
-                    <span className="text-xs tracking-widest text-muted-foreground uppercase">
-                      {post.category}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {post.date}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {post.readingTime} min read
-                    </span>
-                  </div>
-                  {post.excerpt && (
-                    <p className="mt-2 text-sm text-muted-foreground/70 line-clamp-1 max-w-xl">
-                      {post.excerpt}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <motion.div
-                className="hidden md:flex items-center justify-center w-12 h-12 border border-border group-hover:border-accent group-hover:bg-accent/10 transition-all flex-shrink-0 ml-4"
-                whileHover={{ scale: 1.1 }}
-              >
-                <span className="text-muted-foreground group-hover:text-accent transition-colors">
-                  →
-                </span>
-              </motion.div>
-            </Link>
-          </motion.article>
+            <span className="list-num">
+              {String(posts.length - index).padStart(2, "0")}
+            </span>
+            <h3 className="list-title">{post.title}</h3>
+            <span className="list-cat">{post.category}</span>
+            <span className="list-date">{post.date}</span>
+          </Link>
         ))}
       </div>
-    </section>
+    </div>
   )
 }

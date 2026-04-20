@@ -1,106 +1,94 @@
 "use client"
 
-import { motion } from "framer-motion"
 import Link from "next/link"
+import { useEffect, useRef } from "react"
 import type { WpPost } from "@/lib/wp-posts"
-
-const GRADIENTS = [
-  "from-violet-900/40 via-indigo-900/20 to-transparent",
-  "from-indigo-900/40 via-slate-900/20 to-transparent",
-  "from-slate-800/60 via-zinc-900/20 to-transparent",
-  "from-purple-900/40 via-violet-900/20 to-transparent",
-]
 
 interface Props {
   posts: WpPost[]
 }
 
+const gridCols = ["col-7", "col-5", "col-4", "col-8"]
+const fills = ["fill-2", "fill-3", "fill-4", "fill-5"]
+
 export function BlogFeaturedPosts({ posts }: Props) {
-  const featured = posts.slice(0, 4)
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const reveals = sectionRef.current?.querySelectorAll(".reveal")
+    if (!reveals) return
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible") }),
+      { threshold: 0.08 }
+    )
+    reveals.forEach((el) => obs.observe(el))
+    return () => obs.disconnect()
+  }, [])
+
+  const featured = posts[0]
+  const grid = posts.slice(1, 5)
+
+  if (!featured) return null
 
   return (
-    <section className="px-6 py-32 md:px-12">
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="mb-16"
-      >
-        <span className="text-xs tracking-[0.3em] text-muted-foreground uppercase block mb-4">
-          Featured Articles
-        </span>
-        <h2 className="text-5xl md:text-7xl font-medium tracking-tight text-primary">
-          注目の
-          <br />
-          <span className="font-serif italic">記事</span>
-        </h2>
-      </motion.div>
+    <div ref={sectionRef}>
+      {/* Featured section header */}
+      <div className="section-header reveal">
+        <h2 className="section-title">Featured <em>Story</em></h2>
+        <span className="section-count">01</span>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Large card */}
-        {featured[0] && (
-          <motion.div
-            initial={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="md:row-span-2"
-          >
-            <Link
-              href={`/blog/${featured[0].slug}`}
-              className="group relative flex flex-col justify-end h-full min-h-[420px] p-8 overflow-hidden border border-border hover:border-accent transition-colors"
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${GRADIENTS[0]}`} />
-              <div className="relative z-10">
-                <span className="text-xs tracking-widest text-accent uppercase block mb-3">
-                  {featured[0].category}
-                </span>
-                <h3 className="text-2xl md:text-3xl font-medium text-primary group-hover:text-accent transition-colors leading-tight mb-3">
-                  {featured[0].title}
-                </h3>
-                <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                  {featured[0].excerpt}
-                </p>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span>{featured[0].date}</span>
-                  <span>·</span>
-                  <span>{featured[0].readingTime} min read</span>
-                </div>
+      {/* Featured card */}
+      <Link href={`/blog/${featured.slug}`} className="featured reveal">
+        <div className="featured-image">
+          <div className="img-placeholder">
+            <span className="img-label">NCR</span>
+          </div>
+        </div>
+        <div className="featured-info">
+          <div>
+            <span className="post-tag">{featured.category}</span>
+            <h2 className="featured-title">{featured.title}</h2>
+            <div className="featured-meta">
+              <div className="meta-item">
+                <strong>{featured.date}</strong><br />Published
               </div>
-            </Link>
-          </motion.div>
-        )}
+            </div>
+          </div>
+          <div className="read-btn">
+            <span>Read Story</span>
+            <span className="arrow">→</span>
+          </div>
+        </div>
+      </Link>
 
-        {/* Smaller cards */}
-        {featured.slice(1).map((post, index) => (
-          <motion.div
+      {/* Grid section header */}
+      <div className="section-header reveal" id="stories">
+        <h2 className="section-title">Latest <em>Stories</em></h2>
+        <span className="section-count">{String(grid.length).padStart(2, "0")}</span>
+      </div>
+
+      {/* 12-col asymmetric grid */}
+      <div className="posts-grid">
+        {grid.map((post, i) => (
+          <Link
             key={post.id}
-            initial={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: (index + 1) * 0.1, ease: [0.22, 1, 0.36, 1] }}
+            href={`/blog/${post.slug}`}
+            className={`post-card ${gridCols[i] ?? "col-6"} reveal reveal-delay-${i + 1}`}
           >
-            <Link
-              href={`/blog/${post.slug}`}
-              className="group relative flex flex-col justify-end min-h-[200px] p-6 overflow-hidden border border-border hover:border-accent transition-colors"
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${GRADIENTS[(index + 1) % GRADIENTS.length]}`} />
-              <div className="relative z-10">
-                <span className="text-xs tracking-widest text-muted-foreground uppercase block mb-2">
-                  {post.category}
-                </span>
-                <h3 className="text-lg md:text-xl font-medium text-primary group-hover:text-accent transition-colors leading-tight">
-                  {post.title}
-                </h3>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground mt-2">
-                  <span>{post.date}</span>
-                  <span>·</span>
-                  <span>{post.readingTime} min read</span>
-                </div>
+            <div className={`card-img${i === 1 ? " tall" : ""}`}>
+              <div className={`fill ${fills[i]}`} />
+            </div>
+            <div className="card-body">
+              <div className="card-tag">{post.category}</div>
+              <h3 className="card-title">{post.title}</h3>
+              <div className="card-footer">
+                <span>{post.date}</span>
               </div>
-            </Link>
-          </motion.div>
+            </div>
+          </Link>
         ))}
       </div>
-    </section>
+    </div>
   )
 }
